@@ -19,10 +19,11 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="VaulTree"
-        android:textSize="50dp"
+        android:textSize="40dp"
         android:fontFamily="@font/content_font"
         app:layout_constraintBottom_toBottomOf="@+id/iv_icon"
         app:layout_constraintStart_toEndOf="@+id/iv_icon"

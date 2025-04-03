@@ -13,11 +13,13 @@
         android:theme="@style/Theme.VaulTree"
         tools:targetApi="31">
         <activity
-            android:name=".splash.SplashActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="false"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".splash.SplashActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
