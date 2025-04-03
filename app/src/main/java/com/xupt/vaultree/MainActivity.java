@@ -10,6 +10,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.xupt.vaultree.analyse.AnalyseFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -25,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
-
+        fragmentTransaction.add(R.id.fcv_main ,new AnalyseFragment())
+                .commit();
 
     }
 }
