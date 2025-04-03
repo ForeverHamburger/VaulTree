@@ -87,6 +87,8 @@ public class AnalyseFragment extends Fragment {
         lineChart.setDrawGridBackground(false);
         lineChart.setScaleEnabled(false);
         lineChart.animateY(1000); // Y轴入场动画
+        lineChart.getLegend().setEnabled(false);
+        lineChart.setExtraOffsets(10f,40f,30f,32f);
 
         // X轴设置
         XAxis xAxis = lineChart.getXAxis();
@@ -140,6 +142,7 @@ public class AnalyseFragment extends Fragment {
         dataSet.setCircleColor(Color.parseColor("#32B5E6")); // 顶点颜色
         dataSet.setDrawCircles(false); // 不显示顶点圆点
         dataSet.setDrawFilled(true); // 填充曲线区域
+        dataSet.setValueTextSize(10f);
 
         // 设置填充样式（API 18+）
         if (Build.VERSION.SDK_INT >= 18) {
@@ -199,11 +202,10 @@ public class AnalyseFragment extends Fragment {
         pieChart.setTransparentCircleAlpha(110);
         pieChart.setHoleRadius(58f);
         pieChart.setTransparentCircleRadius(61f);
-        pieChart.setDrawCenterText(true);
         pieChart.setRotationAngle(0);
 
         // 设置饼图大小
-        pieChart.setExtraOffsets(10f,32f,10f,32f);
+        pieChart.setExtraOffsets(10f,40f,10f,32f);
 
         // 启用旋转
         pieChart.setRotationEnabled(true);
@@ -241,24 +243,23 @@ public class AnalyseFragment extends Fragment {
         PieDataSet dataSet = new PieDataSet(entries, "数据");
 
         // 设置连接线的长度
-        dataSet.setValueLinePart1Length(0.3f);
+        dataSet.setValueLinePart1Length(0.4f);
         // 设置连接线第二段的长度
         dataSet.setValueLinePart2Length(0.2f);
         // 数据连接线距图形片内部边界的距离，为百分数(0~100f)
         dataSet.setValueLinePart1OffsetPercentage(80f);
         // 设置X值在圆外显示
-        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setXValuePosition(PieDataSet.ValuePosition.INSIDE_SLICE);
         // 设置Y值在圆外显示
         dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
         // 设置连接线的颜色
         dataSet.setValueLineColor(Color.BLACK);
-        // 设置文字的颜色
+        // 设置文字的颜色，同时作用于X值和Y值
         dataSet.setValueTextColor(Color.BLACK);
 
         // 设置连接线宽度
         dataSet.setValueLineWidth(1f);
-
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
 
@@ -271,11 +272,10 @@ public class AnalyseFragment extends Fragment {
         dataSet.setColors(colors);
 
         PieData data = new PieData(dataSet);
-
         // 开启在饼状图上显示值
-        data.setDrawValues(true);
         data.setValueFormatter(new PercentFormatter(pieChart));
-        data.setValueTextSize(11f);
+        data.setValueTextSize(16f);
+        // 再次确认设置文字颜色
         data.setValueTextColor(Color.BLACK);
 
         pieChart.setData(data);
