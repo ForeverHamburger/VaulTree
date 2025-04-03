@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.xupt.vaultree'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.xupt.vaultree"
         minSdk 27
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
@@ -26,10 +26,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
