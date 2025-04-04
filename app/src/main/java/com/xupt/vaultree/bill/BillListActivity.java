@@ -78,7 +78,7 @@ public class BillListActivity extends AppCompatActivity {
         loadBillData(billId);
 
         // 设置返回按钮点击事件
-        binding.back.setOnClickListener(v -> onBackPressed());
+        binding.back.setOnClickListener(v -> finish());
 
         // 设置删除按钮点击事件
         binding.shanchu.setOnClickListener(v -> deleteBill());
@@ -108,7 +108,7 @@ public class BillListActivity extends AppCompatActivity {
                     // 完全折叠时
                     binding.bottomContent.setVisibility(View.GONE);
                     binding.title.setVisibility(View.VISIBLE);
-                    binding.title.setText(currentBill.getCategoryIconName()); // 显示账单分类名称
+                    binding.title.setText(currentBill.getRemark());
                     binding.title.setAlpha(1f);
                     binding.bottomContent.setAlpha(0f);
                 } else {

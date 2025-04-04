@@ -87,7 +87,7 @@
                     android:id="@+id/qian"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
+                    android:textSize="40sp"
                     android:textStyle="bold"
                     android:text="账单金额" />
 
@@ -241,6 +241,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="备注内容"
+                    android:layout_marginTop="20dp"
+
                     android:textSize="16sp"
                     android:textColor="#333333"
                     android:textStyle="bold"
@@ -250,21 +252,27 @@
                     android:id="@+id/tv_remark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="陕西省西安市长安区韦曲街道兰台路"
+                    android:text=""
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="4dp"/>
-                <Button
-                    android:id="@+id/btn_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="编辑账单"
-                    android:textSize="16sp"
-                    android:background="@color/or3"
-                    android:textColor="@color/black"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp"/>
 
+                <TextView
+                    android:id="@+id/btn_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="编辑账单>"
+                    android:layout_gravity="right"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/gray"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+
+                </ImageView>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
