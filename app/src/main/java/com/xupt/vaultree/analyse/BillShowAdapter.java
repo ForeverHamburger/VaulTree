@@ -101,7 +101,8 @@ public class BillShowAdapter extends RecyclerView.Adapter<BillShowAdapter.BillSh
                 Intent intent = new Intent(context, BillListActivity.class);
                 intent.putExtra("billId", bill.getId());
                 if (context instanceof Activity) {
-                    Log.e("logaa", "Activity: " );
+                    Log.e("logaa", "Activity: "+bill.getId() );
+
                     ((Activity) context).startActivity(intent);
                 } else {
                     Log.e("logaa", "Activityno " );

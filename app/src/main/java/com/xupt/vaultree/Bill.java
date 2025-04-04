@@ -1,6 +1,8 @@
 package com.xupt.vaultree;
 
-public class Bill {
+import java.io.Serializable;
+
+public class Bill implements Serializable {
     // 账单唯一标识
     private Long id;
     // 账单金额
