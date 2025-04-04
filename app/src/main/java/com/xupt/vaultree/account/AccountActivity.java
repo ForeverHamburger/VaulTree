@@ -6,9 +6,17 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -22,6 +30,7 @@ import com.xupt.vaultree.MMKVBillStorage;
 import com.xupt.vaultree.R;
 import com.xupt.vaultree.account.Adapter.IconAdapter;
 import com.xupt.vaultree.account.database.IconItem;
+import com.xupt.vaultree.account.database.PaymentMethod;
 import com.xupt.vaultree.account.fragment.ExpenditureFragment;
 import com.xupt.vaultree.account.fragment.IncomeFragment;
 import com.xupt.vaultree.databinding.ActivityAccountBinding;
@@ -55,10 +64,19 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
     private String selectedDate;
 
     // 支付方式和分类
-    private final List<String> paymentMethods = Arrays.asList("现金", "支付宝", "微信", "银行卡");
-    private final List<String> categories = Arrays.asList("餐饮", "交通", "购物", "娱乐");
+    // 支付方式数据
+    private final List<PaymentMethod> paymentMethods = Arrays.asList(
+            new PaymentMethod(R.drawable.ic_cash, "现金"),
+            new PaymentMethod(R.drawable.ic_alipay, "支付宝"),
+            new PaymentMethod(R.drawable.ic_wechat, "微信支付"),
+            new PaymentMethod(R.drawable.ic_card, "银行卡")
+    );
+
+    private PaymentMethod currentPaymentMethod = paymentMethods.get(0);
+//    private final List<String> paymentMethods = Arrays.asList("现金", "支付宝", "微信", "银行卡");
+//    private final List<String> categories = Arrays.asList("餐饮", "交通", "购物", "娱乐");
     private int selectedPaymentIndex = 0;
-    private int selectedCategoryIndex = 0;
+//    private int selectedCategoryIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +159,51 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         }
         else if (id == R.id.tb_calc_num_del) {
             doDelete();
+        }else if (v.getId() == R.id.tb_note_date) {
+            showPaymentMethodDialog();
         }
+    }
+    // 显示支付方式选择对话框
+    private void showPaymentMethodDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("选择支付方式");
+
+        // 创建带图标的列表项
+        ListAdapter adapter = new ArrayAdapter<PaymentMethod>(
+                this,
+                R.layout.item_payment_method,
+                R.id.tv_payment_name,
+                paymentMethods
+        ) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                PaymentMethod method = paymentMethods.get(position);
+
+                ImageView icon = view.findViewById(R.id.iv_payment_icon);
+                TextView name = view.findViewById(R.id.tv_payment_name);
+
+                icon.setImageResource(method.getIconResId());
+                name.setText(method.getName());
+
+                return view;
+            }
+        };
+
+        builder.setAdapter(adapter, (dialog, which) -> {
+            currentPaymentMethod = paymentMethods.get(which);
+            updatePaymentMethodUI();
+        });
+
+        builder.setNegativeButton("取消", null);
+        builder.show();
+    }
+
+    // 更新支付方式UI显示
+    private void updatePaymentMethodUI() {
+        binding.ivPaymentIcon.setImageResource(currentPaymentMethod.getIconResId());
+        binding.tvPayment.setText(currentPaymentMethod.getName());
     }
 
 
@@ -213,7 +275,7 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         finish();
     }
     // 添加成员变量保存当前选中的分类
-    private IconItem currentSelectedIcon;
+    private IconItem currentSelectedIcon=new IconItem(R.drawable.ic_noknow, "未知");
 
     @Override
     public void onItemClick(IconItem item, int position) {
@@ -238,17 +300,16 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         if (noteText.equals("点击添加备注")) {
             noteText = "";
         }
-
         return new Bill(
                 isEdit && currentBill != null ? currentBill.getId() : System.currentTimeMillis(),
                 amount,
                 noteText,
-                paymentMethods.get(selectedPaymentIndex),
-                categories.get(selectedCategoryIndex),
+                paymentMethods.get(selectedPaymentIndex).getName(),
+                currentPaymentMethod.getIconResId(),
                 dateMillis,
                 isIncome,
-                currentSelectedIcon.getIconName(), // 使用选中的分类名称
-                currentSelectedIcon.getIconResId() // 保存图标资源ID
+                currentSelectedIcon.getIconName(),
+                currentSelectedIcon.getIconResId()
         );
     }
 
@@ -263,7 +324,6 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         }
 
         selectedPaymentIndex = paymentMethods.indexOf(bill.getPayName());
-        selectedCategoryIndex = categories.indexOf(bill.getCategoryName());
 
         binding.tbNoteMoney.setText(String.format(Locale.getDefault(), "%.2f", bill.getAmount()));
         selectedDate = formatDate(bill.getDateMillis());
@@ -271,6 +331,8 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         // 恢复分类图标和文本
         binding.tbLabel.setText(bill.getCategoryIconName());
         binding.tbNoteClear.setImageResource(bill.getCategoryIconResId());
+        binding.ivPaymentIcon.setImageResource(bill.getPayIconResId());
+        binding.tvPayment.setText(bill.getPayName());
 
         // 设置颜色
         int color = bill.isIncome() ? getColor(R.color.income_color) : getColor(R.color.expense_color);
@@ -357,6 +419,7 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         binding.chipDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date()));
         binding.chipNote.setText("点击添加备注");
     }
+
 
     private String formatDate(long millis) {
         Log.d("AccountActivity", "Formatting date: " + millis);
