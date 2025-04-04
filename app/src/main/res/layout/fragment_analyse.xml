@@ -6,6 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".analyse.AnalyseFragment">
 
+    <TextView
+        android:id="@+id/tv_month"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:textSize="35sp"
+        android:text="12月"
+        android:gravity="left"
+        android:fontFamily="@font/content_font"
+        android:paddingLeft="20dp"
+        android:background="@drawable/top_bg"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_year"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="110dp"
+        android:text="2025年"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/content_font"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/tv_month"
+        app:layout_constraintTop_toTopOf="@id/tv_month"/>
+
     <com.necer.calendar.NCalendar
         android:id="@+id/monthCalendar"
         android:layout_width="match_parent"
@@ -13,35 +40,88 @@
         app:stretchCalendarEnable="true"
         app:defaultCalendar="month"
         app:showHolidayWorkday="true"
+        android:layout_marginTop="10dp"
         app:todayUnCheckedSolarTextColor="@color/orange"
         app:todayUnCheckedLunarTextColor="@color/orange"
         app:todayCheckedBackground="@drawable/today_check"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_month"
         app:layout_constraintLeft_toLeftOf="parent">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <include layout="@layout/card_count" />
+
+                <TextView
+                    android:id="@+id/tv_bill_rv_name"
+                    android:text="当日账单一览"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/content_font"
+                    app:layout_constraintTop_toBottomOf="@+id/card_count"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_margin="20dp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_bill"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_bill_rv_name"/>
+
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChart"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:background="@color/grey_bg"
+                    android:padding="10dp"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/chart_bg"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/rv_bill" />
+
+                <TextView
+                    android:id="@+id/tv_bill_lc_name"
+                    android:text="近七日支出统计"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/content_font"
+                    app:layout_constraintTop_toTopOf="@+id/lineChart"
+                    app:layout_constraintStart_toStartOf="@+id/lineChart" />
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pieChart"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"
-                    android:background="@color/grey_bg"
+                    android:background="@drawable/chart_bg"
                     app:layout_constraintTop_toBottomOf="@id/lineChart"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_bill_pc_name"
+                    android:text="分类统计（点击图表切换）"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:layout_margin="20dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/content_font"
+                    app:layout_constraintTop_toTopOf="@+id/pieChart"
+                    app:layout_constraintStart_toStartOf="@+id/pieChart" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    app:layout_constraintTop_toBottomOf="@id/pieChart"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

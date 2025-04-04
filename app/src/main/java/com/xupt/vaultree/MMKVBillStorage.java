@@ -40,6 +40,7 @@ public class MMKVBillStorage {
         Type type = new TypeToken<List<Bill>>(){}.getType();
         return new Gson().fromJson(json, type);
     }
+
     public Bill getBillById(long id) {
         List<Bill> bills = getAllBills();
         for (Bill bill : bills) {
@@ -103,4 +104,8 @@ public class MMKVBillStorage {
         mmkv.encode(BILLS_KEY, json);
     }
 
+    // 清除 MMKV 所有信息的方法
+    public void clearAllData() {
+        mmkv.clear();
+    }
 }

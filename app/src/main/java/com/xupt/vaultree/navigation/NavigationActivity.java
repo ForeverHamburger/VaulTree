@@ -42,8 +42,7 @@ public class NavigationActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        getWindow().setStatusBarColor(getResources().getColor(R.color.grey_bg));
-
+        setWindowColor(R.color.orange);
         List<NavigationInfo> navigationInfos = new ArrayList<>();
         navigationInfos.add(new NavigationInfo("统计",new AnalyseFragment()));
         navigationInfos.add(new NavigationInfo("我的",new MineFragment()));
@@ -60,6 +59,11 @@ public class NavigationActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 // 根据导航项的标题进行不同的处理
+                if (menuItem.getTitle().equals("统计")) {
+                    setWindowColor(R.color.orange);
+                } else {
+                    setWindowColor(R.color.grey_bg);
+                }
                 getFragment(menuItem.getTitle(),navigationInfos);
                 return true;
             }
@@ -79,7 +83,7 @@ public class NavigationActivity extends AppCompatActivity {
         });
         binding.fabNavigation.setOnClickListener(
                 v -> {
-                    Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                    Intent intent = new Intent(NavigationActivity.this, AccountActivity.class);
                     startActivity(intent);
 
                 }
@@ -102,5 +106,9 @@ public class NavigationActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void setWindowColor(int resourse){
+        getWindow().setStatusBarColor(getResources().getColor(resourse));
     }
 }

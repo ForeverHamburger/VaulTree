@@ -11,10 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -31,18 +38,40 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.github.mikephil.charting.utils.Utils;
+import com.necer.enumeration.DateChangeBehavior;
+import com.necer.listener.OnCalendarChangedListener;
+import com.xupt.vaultree.Bill;
+import com.xupt.vaultree.MMKVBillStorage;
 import com.xupt.vaultree.R;
 import com.xupt.vaultree.databinding.FragmentAnalyseBinding;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class AnalyseFragment extends Fragment {
     private FragmentAnalyseBinding binding;
-    LineChart lineChart;
-    PieChart pieChart;
+    private LineChart lineChart;
+    private PieChart pieChart;
+    private TextView howMuch;
+    private TextView day;
+    private MMKVBillStorage mmkvBillStorage;
+    //true表示收入 false表示支出
+    private boolean pieAccount = true;
     public AnalyseFragment() {
         // Required empty public constructor
     }
@@ -70,15 +99,66 @@ public class AnalyseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         lineChart = binding.lineChart;
         pieChart = binding.pieChart;
+        mmkvBillStorage = new MMKVBillStorage();
         initLineChart();
         // 设置数据
         setLineChartData();
-
         // 初始化饼状图
         initPieChart();
         // 设置饼状图数据
-        setPieChartData();
+        setPieChartData(pieAccount);
+        // 设置日历相关
+        setCalendar();
+        initRecyclerView();
+
+        howMuch = view.findViewById(R.id.tv_howmuch);
+        day = view.findViewById(R.id.tv_day);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        List<Bill> allBills = mmkvBillStorage.getAllBills();
+        float v = BillStatisticsUtils.calculateTotalProfitLoss(allBills);
+        String s = String.valueOf(v);
+        howMuch.setText(s);
+        day.setText("累计记账时长" + BillStatisticsUtils.calculateRecordedDays(allBills) + "天");
+        setLineChartData();
+    }
+
+    private void initRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
+        binding.rvBill.setLayoutManager(layoutManager);
+
+        List<Bill> bills = mmkvBillStorage.getAllBills();
+        BillShowAdapter billShowAdapter = new BillShowAdapter(bills,getContext());
+        binding.rvBill.setAdapter(billShowAdapter);
+    }
+
+    private void initRecyclerView(long i) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
+        binding.rvBill.setLayoutManager(layoutManager);
+        List<Bill> bills = mmkvBillStorage.getAllBills();
+        List<Bill> billsByDate = BillStatisticsUtils.getBillsByDate(bills, i);
+        BillShowAdapter billShowAdapter = new BillShowAdapter(billsByDate,getContext());
+        binding.rvBill.setAdapter(billShowAdapter);
+    }
+
+    private void setCalendar() {
+        binding.monthCalendar.setOnCalendarChangedListener(new OnCalendarChangedListener() {
+            @Override
+            public void onCalendarChange(int i, int i1, LocalDate localDate, DateChangeBehavior dateChangeBehavior) {
+                binding.tvMonth.setText(i1 + "月");
+                binding.tvYear.setText(i + "年");
+                LocalDateTime localDateTime = localDate.atStartOfDay();
+                ZoneId zoneId = ZoneId.systemDefault();
+                ZonedDateTime zonedDateTime = localDateTime.atZone(zoneId);
+                long epochMilli = zonedDateTime.toInstant().toEpochMilli();
+                initRecyclerView(epochMilli);
+            }
+        });
+    }
+
     // 初始化图表
     private void initLineChart() {
         lineChart.setBackgroundColor(Color.TRANSPARENT);
@@ -125,14 +205,11 @@ public class AnalyseFragment extends Fragment {
 
     // 设置数据
     private void setLineChartData() {
-        List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 20));
-        entries.add(new Entry(1, 30));
-        entries.add(new Entry(2, 25));
-        entries.add(new Entry(3, 40));
-        entries.add(new Entry(4, 115));
-        entries.add(new Entry(5, 330));
-        entries.add(new Entry(6, 40));
+        // 获取近七天的账单
+        List<Bill> lastSevenDaysBills = BillStatisticsUtils.getBillsInLastSevenDays(mmkvBillStorage.getAllBills());
+        Map<Long, Float> dailyProfitLoss = calculateDailyExpenseAmount(lastSevenDaysBills);
+        // 将统计结果转换为 Entry 对象列表
+        List<Entry> entries = convertToEntries(dailyProfitLoss);
 
         autoAdjustYAxis(entries);
 
@@ -155,7 +232,53 @@ public class AnalyseFragment extends Fragment {
         lineChart.setData(lineData);
         lineChart.invalidate();
     }
+    // 统计近七天的支出金额
+    private Map<Long, Float> calculateDailyExpenseAmount(List<Bill> bills) {
+        Map<Long, Float> dailyExpenseAmount = new HashMap<>();
+        // 初始化近七天的日期，将每天的支出金额初始值设为 0
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -6);
+        for (int i = 0; i < 7; i++) {
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            long dayStartMillis = calendar.getTimeInMillis();
+            dailyExpenseAmount.put(dayStartMillis, 0f);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        for (Bill bill : bills) {
+            if (!bill.isIncome()) {
+                long dateMillis = bill.getDateMillis();
+                Calendar billCalendar = Calendar.getInstance();
+                billCalendar.setTimeInMillis(dateMillis);
+                billCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                billCalendar.set(Calendar.MINUTE, 0);
+                billCalendar.set(Calendar.SECOND, 0);
+                billCalendar.set(Calendar.MILLISECOND, 0);
+                long dayStartMillis = billCalendar.getTimeInMillis();
+
+                float amount = bill.getAmount();
+                dailyExpenseAmount.put(dayStartMillis, dailyExpenseAmount.get(dayStartMillis) + amount);
+            }
+        }
+        return dailyExpenseAmount;
+    }
+
+    // 将统计结果转换为 Entry 对象列表
+    private List<Entry> convertToEntries(Map<Long, Float> dailyExpenseAmount) {
+        List<Entry> entries = new ArrayList<>();
+        List<Long> sortedDates = new ArrayList<>(dailyExpenseAmount.keySet());
+        Collections.sort(sortedDates);
+        int index = 0;
+        for (Long dateMillis : sortedDates) {
+            float expenseAmount = dailyExpenseAmount.get(dateMillis);
+            entries.add(new Entry(index++, expenseAmount));
+        }
+        return entries;
+    }
     private void autoAdjustYAxis(List<Entry> entries) {
         if (entries.isEmpty()) {
             return;
@@ -194,7 +317,7 @@ public class AnalyseFragment extends Fragment {
     private void initPieChart() {
         pieChart.setUsePercentValues(true); // 使用百分比显示
         pieChart.getDescription().setEnabled(false); // 隐藏描述
-        pieChart.setExtraOffsets(5, 10, 5, 5);
+        pieChart.setExtraOffsets(5, 20, 5, 5);
         pieChart.setDragDecelerationFrictionCoef(0.95f);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.WHITE);
@@ -203,9 +326,47 @@ public class AnalyseFragment extends Fragment {
         pieChart.setHoleRadius(58f);
         pieChart.setTransparentCircleRadius(61f);
         pieChart.setRotationAngle(0);
+        pieChart.setTouchEnabled(true);
+
+
+        //设置中心部分的字  （一般中间白色圆不隐藏的情况下才设置）
+        pieChart.setCenterText("总收入");
+        //设置中心字的字体颜色
+        pieChart.setCenterTextColor(Color.BLACK);
+        //设置中心字的字体大小
+        pieChart.setCenterTextSize(12f);
+
+        pieChart.setOnChartGestureListener(new OnChartGestureListener() {
+            @Override
+            public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {}
+            @Override
+            public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture){}
+            @Override
+            public void onChartLongPressed(MotionEvent me) {}
+            @Override
+            public void onChartDoubleTapped(MotionEvent me) {}
+            @Override
+            public void onChartSingleTapped(MotionEvent me) {
+                if (!pieAccount) {
+                    pieChart.setCenterText("支出");
+                    setPieChartData(pieAccount);
+                } else {
+                    pieChart.setCenterText("收入");
+                    setPieChartData(pieAccount);
+                }
+                pieAccount = !pieAccount;
+                pieChart.animateY(1400);
+            }
+            @Override
+            public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {}
+            @Override
+            public void onChartScale(MotionEvent me, float scaleX, float scaleY) {}
+            @Override
+            public void onChartTranslate(MotionEvent me, float dX, float dY) {}
+        });
 
         // 设置饼图大小
-        pieChart.setExtraOffsets(10f,40f,10f,32f);
+        pieChart.setExtraOffsets(20f,30f,20f,40f);
 
         // 启用旋转
         pieChart.setRotationEnabled(true);
@@ -215,30 +376,19 @@ public class AnalyseFragment extends Fragment {
         pieChart.getLegend().setEnabled(false);
 
         // 设置出场动画
-        pieChart.animateY(1400); // 动画持续时间为1400毫秒
-
-        // 启用点击事件
-        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                // 处理点击事件
-            }
-
-            @Override
-            public void onNothingSelected() {
-                // 未选中任何部分时的处理
-            }
-        });
+        pieChart.animateY(700);
     }
-
     // 设置饼状图数据
-    private void setPieChartData() {
+    private void setPieChartData(Boolean isIncome) {
+        // 统计分类数据，这里假设统计支出
+        Map<String, Float> categoryTotal = BillStatisticsUtils.calculateCategoryTotal(mmkvBillStorage.getAllBills(), isIncome);
+
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(20f, "交通"));
-        entries.add(new PieEntry(30f, "教育"));
-        entries.add(new PieEntry(25f, "娱乐"));
-        entries.add(new PieEntry(40f, "购物"));
-        entries.add(new PieEntry(15f, "餐饮"));
+        for (Map.Entry<String, Float> entry : categoryTotal.entrySet()) {
+            String category = entry.getKey();
+            float amount = entry.getValue();
+            entries.add(new PieEntry(amount, category));
+        }
 
         PieDataSet dataSet = new PieDataSet(entries, "数据");
 
@@ -265,7 +415,7 @@ public class AnalyseFragment extends Fragment {
 
         // 设置颜色
         ArrayList<Integer> colors = new ArrayList<>();
-        int[] ints = generateGradientColors(Color.parseColor("#F7983C"), Color.parseColor("#FFFF00"), 6);
+        int[] ints = generateGradientColors(Color.parseColor("#F7983C"), Color.parseColor("#FFFF00"), entries.size());
         for (Integer color : ints) {
             colors.add(color);
         }

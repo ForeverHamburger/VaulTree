@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.xupt.vaultree.MMKVBillStorage;
 import com.xupt.vaultree.R;
 import com.xupt.vaultree.databinding.FragmentMineBinding;
 
@@ -55,6 +56,7 @@ public class MineFragment extends Fragment {
                 dialog.passDetect();
                 new Handler().postDelayed(() -> {
                     dialog.notPassDetect();
+                    new MMKVBillStorage().clearAllData();
                 }, 500);
             }
         });
