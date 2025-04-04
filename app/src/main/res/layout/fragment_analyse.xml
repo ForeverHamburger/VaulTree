@@ -5,34 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".analyse.AnalyseFragment">
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <com.necer.calendar.NCalendar
+        android:id="@+id/monthCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:stretchCalendarEnable="true"
+        app:defaultCalendar="month"
+        app:showHolidayWorkday="true"
+        app:todayUnCheckedSolarTextColor="@color/orange"
+        app:todayUnCheckedLunarTextColor="@color/orange"
+        app:todayCheckedBackground="@drawable/today_check"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/lineChart"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="wrap_content">
 
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pieChart"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                app:layout_constraintTop_toBottomOf="@id/lineChart"
-                app:layout_constraintStart_toStartOf="parent" />
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="@color/grey_bg"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:background="@color/grey_bg"
+                    app:layout_constraintTop_toBottomOf="@id/lineChart"
+                    app:layout_constraintStart_toStartOf="parent" />
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
-    </androidx.core.widget.NestedScrollView>
+    </com.necer.calendar.NCalendar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

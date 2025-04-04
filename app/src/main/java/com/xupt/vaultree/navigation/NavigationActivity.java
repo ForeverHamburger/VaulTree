@@ -20,13 +20,13 @@ import com.xupt.vaultree.R;
 import com.xupt.vaultree.account.AccountActivity;
 import com.xupt.vaultree.analyse.AnalyseFragment;
 import com.xupt.vaultree.databinding.ActivityMainBinding;
+import com.xupt.vaultree.mine.MineFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class NavigationActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    private boolean isSelected = false;
     private FragmentManager supportFragmentManager;
     private FragmentTransaction fragmentTransaction;
     private static final int DOUBLE_CLICK_TIME_DELAY = 2000;
@@ -42,26 +42,23 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        getWindow().setStatusBarColor(getResources().getColor(R.color.white));
+        getWindow().setStatusBarColor(getResources().getColor(R.color.grey_bg));
 
         List<NavigationInfo> navigationInfos = new ArrayList<>();
         navigationInfos.add(new NavigationInfo("统计",new AnalyseFragment()));
-        navigationInfos.add(new NavigationInfo("我的",new AnalyseFragment()));
+        navigationInfos.add(new NavigationInfo("我的",new MineFragment()));
 
         supportFragmentManager = getSupportFragmentManager();
         fragmentTransaction = supportFragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fcv_main ,new AnalyseFragment())
-                .add(R.id.fcv_main ,new AnalyseFragment())
-                .hide(new AnalyseFragment())
-                .hide(new AnalyseFragment())
+        fragmentTransaction.add(R.id.fcv_main ,navigationInfos.get(0).getFragment())
+                .add(R.id.fcv_main ,navigationInfos.get(1).getFragment())
+                .hide(navigationInfos.get(1).getFragment())
                 .commit();
-
 
         binding.bnvNavigation.setItemIconTintList(null);
         binding.bnvNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                isSelected = false;
                 // 根据导航项的标题进行不同的处理
                 getFragment(menuItem.getTitle(),navigationInfos);
                 return true;
@@ -93,14 +90,14 @@ public class MainActivity extends AppCompatActivity {
             public void handleOnBackPressed() {
                 if (firstBackPressedTime == 0) {
                     firstBackPressedTime = System.currentTimeMillis();
-                    Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NavigationActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
                 } else {
                     long secondBackPressedTime = System.currentTimeMillis();
                     if (secondBackPressedTime - firstBackPressedTime < DOUBLE_CLICK_TIME_DELAY) {
                         finish();
                     } else {
                         firstBackPressedTime = 0;
-                        Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NavigationActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
