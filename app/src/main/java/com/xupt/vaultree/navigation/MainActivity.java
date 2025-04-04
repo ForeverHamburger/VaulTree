@@ -1,5 +1,6 @@
 package com.xupt.vaultree.navigation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.xupt.vaultree.R;
+import com.xupt.vaultree.account.AccountActivity;
 import com.xupt.vaultree.analyse.AnalyseFragment;
 import com.xupt.vaultree.databinding.ActivityMainBinding;
 
@@ -78,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
                 return null;
             }
         });
+        binding.fabNavigation.setOnClickListener(
+                v -> {
+                    Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                    startActivity(intent);
+
+                }
+        );
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override

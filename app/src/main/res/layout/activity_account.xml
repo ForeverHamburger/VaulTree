@@ -78,7 +78,7 @@
             android:id="@+id/tb_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="消费"
+            android:text="未知"
             android:textColor="#000000"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -90,7 +90,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:onClick="onClick"
-            android:src="@drawable/ic_cosmetics"
+            android:src="@drawable/ic_noknow"
             app:layout_constraintBottom_toTopOf="@+id/tb_label"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -390,17 +390,28 @@
             <RelativeLayout
                 android:id="@+id/tb_note_date"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="48dp"
                 android:onClick="onClick">
-
+                <!-- 支付方式图标 -->
                 <ImageView
+                    android:id="@+id/iv_payment_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_cash" />
+
+                <!-- 支付方式文本 -->
+                <TextView
+                    android:id="@+id/tv_payment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/ic_date" />
+                    android:layout_toEndOf="@id/iv_payment_icon"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:text="现金"
+                    android:textColor="#333333" />
             </RelativeLayout>
-
             <TextView
                 android:id="@+id/tb_calc_num_done"
                 android:layout_width="match_parent"
