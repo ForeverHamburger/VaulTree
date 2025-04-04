@@ -66,7 +66,7 @@ public class AnalyseFragment extends Fragment {
     private TextView howMuch;
     private TextView day;
     private MMKVBillStorage mmkvBillStorage;
-    //true表示支出 false表示收入
+    //true表示收入 false表示支出
     private boolean pieAccount = true;
     public AnalyseFragment() {
         // Required empty public constructor
@@ -102,7 +102,7 @@ public class AnalyseFragment extends Fragment {
         // 初始化饼状图
         initPieChart();
         // 设置饼状图数据
-        setPieChartData();
+        setPieChartData(pieAccount);
         // 设置日历相关
         setCalendar();
         initRecyclerView();
@@ -114,12 +114,12 @@ public class AnalyseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        initRecyclerView();
         List<Bill> allBills = mmkvBillStorage.getAllBills();
         float v = BillStatisticsUtils.calculateTotalProfitLoss(allBills);
         String s = String.valueOf(v);
         howMuch.setText(s);
         day.setText("累计记账时长" + BillStatisticsUtils.calculateRecordedDays(allBills) + "天");
+        setLineChartData();
     }
 
     private void initRecyclerView() {
@@ -342,12 +342,12 @@ public class AnalyseFragment extends Fragment {
             public void onChartDoubleTapped(MotionEvent me) {}
             @Override
             public void onChartSingleTapped(MotionEvent me) {
-                if (pieAccount) {
-                    pieChart.setCenterText("总收入\n100元");
-                    setPieChartData();
+                if (!pieAccount) {
+                    pieChart.setCenterText("支出");
+                    setPieChartData(pieAccount);
                 } else {
-                    pieChart.setCenterText("总支出\n100元");
-                    setPieChartData();
+                    pieChart.setCenterText("收入");
+                    setPieChartData(pieAccount);
                 }
                 pieAccount = !pieAccount;
                 pieChart.animateY(1400);
@@ -373,15 +373,17 @@ public class AnalyseFragment extends Fragment {
         // 设置出场动画
         pieChart.animateY(1400); // 动画持续时间为1400毫秒
     }
-
     // 设置饼状图数据
-    private void setPieChartData() {
+    private void setPieChartData(Boolean isIncome) {
+        // 统计分类数据，这里假设统计支出
+        Map<String, Float> categoryTotal = BillStatisticsUtils.calculateCategoryTotal(mmkvBillStorage.getAllBills(), isIncome);
+
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(20f, "交通"));
-        entries.add(new PieEntry(30f, "教育"));
-        entries.add(new PieEntry(25f, "娱乐"));
-        entries.add(new PieEntry(40f, "购物"));
-        entries.add(new PieEntry(15f, "餐饮"));
+        for (Map.Entry<String, Float> entry : categoryTotal.entrySet()) {
+            String category = entry.getKey();
+            float amount = entry.getValue();
+            entries.add(new PieEntry(amount, category));
+        }
 
         PieDataSet dataSet = new PieDataSet(entries, "数据");
 
@@ -408,7 +410,7 @@ public class AnalyseFragment extends Fragment {
 
         // 设置颜色
         ArrayList<Integer> colors = new ArrayList<>();
-        int[] ints = generateGradientColors(Color.parseColor("#F7983C"), Color.parseColor("#FFFF00"), 6);
+        int[] ints = generateGradientColors(Color.parseColor("#F7983C"), Color.parseColor("#FFFF00"), entries.size());
         for (Integer color : ints) {
             colors.add(color);
         }

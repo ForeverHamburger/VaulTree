@@ -104,4 +104,8 @@ public class MMKVBillStorage {
         mmkv.encode(BILLS_KEY, json);
     }
 
+    // 清除 MMKV 所有信息的方法
+    public void clearAllData() {
+        mmkv.clear();
+    }
 }
