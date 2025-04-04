@@ -253,21 +253,6 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         binding.tvPayment.setText(currentPaymentMethod.getName());
     }
 
-
-//    private void showDatePicker() {
-//        Calendar calendar = Calendar.getInstance();
-//        DatePickerDialog dialog = new DatePickerDialog(
-//                this,
-//                (view, year, month, dayOfMonth) -> {
-//                    selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, dayOfMonth);
-//                    binding.chipDate.setText(selectedDate);
-//                },
-//                calendar.get(Calendar.YEAR),
-//                calendar.get(Calendar.MONTH),
-//                calendar.get(Calendar.DAY_OF_MONTH)
-//        );
-//        dialog.show();
-//    }
     private void showDatePicker() {
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("选择日期")
