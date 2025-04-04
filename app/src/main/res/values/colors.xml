@@ -5,4 +5,11 @@
 
     <color name="or1">#F7983C</color>
     <color name="or2">#FB9F66</color>
+    <color name="orange">#F57729</color>
+
+    <color name="transparent">#00FFFFFF</color>
+    <color name="light_green">#BFE1CA</color>
+    <color name="emerald_green">#A5CEBD</color>
+    <color name="dark_green">#608B7A</color>
+    <color name="bright_yellow">#FFC530</color>
 </resources>

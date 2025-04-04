@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_statistics"
+        android:icon="@drawable/ic_statistics_selector"
+        android:title="统计" />
+
+    <item
+        android:id="@+id/navigation"
+        android:enabled="false"
+        android:title="记账" />
+
+    <item
+        android:id="@+id/navigation_mine"
+        android:icon="@drawable/ic_people_selector"
+        android:title="我的" />
+</menu>

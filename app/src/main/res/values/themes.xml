@@ -21,4 +21,9 @@
         <!--弹窗背景是否变暗-->
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+    <style name="BnvStyle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:drawablePadding">18dp</item>
+    </style>
 </resources>
