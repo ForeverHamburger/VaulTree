@@ -330,7 +330,7 @@ public class AnalyseFragment extends Fragment {
 
 
         //设置中心部分的字  （一般中间白色圆不隐藏的情况下才设置）
-        pieChart.setCenterText("总支出\n100元");
+        pieChart.setCenterText("总收入");
         //设置中心字的字体颜色
         pieChart.setCenterTextColor(Color.BLACK);
         //设置中心字的字体大小

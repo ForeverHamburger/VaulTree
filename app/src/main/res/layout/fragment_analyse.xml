@@ -89,7 +89,7 @@
 
                 <TextView
                     android:id="@+id/tv_bill_lc_name"
-                    android:text="近七日收入统计"
+                    android:text="近七日支出统计"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
@@ -108,7 +108,7 @@
 
                 <TextView
                     android:id="@+id/tv_bill_pc_name"
-                    android:text="分类统计"
+                    android:text="分类统计（点击图表切换）"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
