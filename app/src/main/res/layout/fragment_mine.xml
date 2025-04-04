@@ -34,14 +34,14 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_edit_head_container"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         app:cardCornerRadius="70dp"
         app:cardElevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ll_edit_top"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_edit_top">
+        app:layout_constraintTop_toTopOf="@+id/ll_edit_top">
 
         <ImageView
             android:id="@+id/iv_edit_user_head"
@@ -62,7 +62,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_edit_head_container" />
+        app:layout_constraintTop_toBottomOf="@id/cv_haibao" />
 
     <EditText
         android:id="@+id/et_username"
@@ -118,6 +118,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_haibao"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:cardCornerRadius="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_edit_top">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/pic_haibao"/>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

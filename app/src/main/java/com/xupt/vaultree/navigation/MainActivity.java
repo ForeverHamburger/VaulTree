@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        getWindow().setStatusBarColor(getResources().getColor(R.color.white));
+        getWindow().setStatusBarColor(getResources().getColor(R.color.grey_bg));
 
         List<NavigationInfo> navigationInfos = new ArrayList<>();
         navigationInfos.add(new NavigationInfo("统计",new AnalyseFragment()));
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 .hide(navigationInfos.get(0).getFragment())
                 .hide(navigationInfos.get(1).getFragment())
                 .commit();
-
 
         binding.bnvNavigation.setItemIconTintList(null);
         binding.bnvNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
