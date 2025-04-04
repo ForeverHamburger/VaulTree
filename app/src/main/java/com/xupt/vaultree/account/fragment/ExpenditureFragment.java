@@ -47,12 +47,15 @@ import java.util.List;
 //    private void updateButtonState(boolean expanded) {
 //        int iconRes = expanded ? R.drawable.olp : R.drawable.lbd;
 //        binding.btnSelectCancel.setImageResource(iconRes);
-//    }
-//
-//    private boolean isExpanded = false;
-//    private boolean isAnimating = false;
-//
 
+//
+//    @Override
+//    public void onDestroyView() {
+//        // 重置动画状态
+//        binding.bgOverlay.clearAnimation();
+//        binding.bgOverlay.setVisibility(View.INVISIBLE);
+//        super.onDestroyView();
+//    }
 
 
 public class ExpenditureFragment extends Fragment {
