@@ -359,6 +359,8 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
     }
 
     private String formatDate(long millis) {
+        Log.d("AccountActivity", "Formatting date: " + millis);
+        System.out.println("Formatting date: " + millis);
         return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 .format(new Date(millis));
     }

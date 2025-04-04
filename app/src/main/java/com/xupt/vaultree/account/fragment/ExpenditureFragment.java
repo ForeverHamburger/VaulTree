@@ -47,7 +47,10 @@ import java.util.List;
 //    private void updateButtonState(boolean expanded) {
 //        int iconRes = expanded ? R.drawable.olp : R.drawable.lbd;
 //        binding.btnSelectCancel.setImageResource(iconRes);
-
+//    }
+//
+//    private boolean isExpanded = false;
+//    private boolean isAnimating = false;
 //
 //    @Override
 //    public void onDestroyView() {
