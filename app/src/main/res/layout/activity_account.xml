@@ -38,29 +38,37 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/record_vp"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/record_vp">
 
+        <!-- 日期Chip -->
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_date"
             style="@style/Widget.MaterialComponents.Chip.Action"
             android:layout_width="wrap_content"
-            android:background="@drawable/bg_radius_click"
             android:layout_height="wrap_content"
             android:text="2025-04-03"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:chipBackgroundColor="@color/or4"
+            app:chipCornerRadius="16dp"
             app:chipIcon="@drawable/ic_date"
-            app:chipBackgroundColor="@color/or4"/>
+            app:chipIconSize="20dp"
+            app:chipStartPadding="8dp" />
 
+        <!-- 备注Chip -->
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_note"
             style="@style/Widget.MaterialComponents.Chip.Action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_radius_click"
             android:text="点击添加备注"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:chipBackgroundColor="@color/or4"
+            app:chipCornerRadius="16dp"
             app:chipIcon="@drawable/ic_book"
-            app:chipBackgroundColor="@color/or4"/>
+            app:chipStartPadding="8dp" />
     </com.google.android.material.chip.ChipGroup>
 
     <!-- 分割线 -->
