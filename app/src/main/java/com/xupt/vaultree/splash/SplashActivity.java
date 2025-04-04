@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.xupt.vaultree.navigation.MainActivity;
+import com.xupt.vaultree.navigation.NavigationActivity;
 import com.xupt.vaultree.R;
 import com.xupt.vaultree.databinding.ActivitySplashBinding;
 
@@ -49,7 +49,7 @@ public class SplashActivity extends AppCompatActivity {
                 if (isPass) {
                     detectDialog.passDetect();
                     new Handler().postDelayed(() -> {
-                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                        Intent intent = new Intent(SplashActivity.this, NavigationActivity.class);
                         startActivity(intent);
                         finish(); // 关闭当前的 SplashActivity
                     },1000);

@@ -25,9 +25,8 @@ import com.xupt.vaultree.mine.MineFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class NavigationActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    private boolean isSelected = false;
     private FragmentManager supportFragmentManager;
     private FragmentTransaction fragmentTransaction;
     private static final int DOUBLE_CLICK_TIME_DELAY = 2000;
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         binding.bnvNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                isSelected = false;
                 // 根据导航项的标题进行不同的处理
                 getFragment(menuItem.getTitle(),navigationInfos);
                 return true;
@@ -92,14 +90,14 @@ public class MainActivity extends AppCompatActivity {
             public void handleOnBackPressed() {
                 if (firstBackPressedTime == 0) {
                     firstBackPressedTime = System.currentTimeMillis();
-                    Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NavigationActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
                 } else {
                     long secondBackPressedTime = System.currentTimeMillis();
                     if (secondBackPressedTime - firstBackPressedTime < DOUBLE_CLICK_TIME_DELAY) {
                         finish();
                     } else {
                         firstBackPressedTime = 0;
-                        Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NavigationActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
