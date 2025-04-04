@@ -69,6 +69,7 @@ public class AnalyseFragment extends Fragment {
     private PieChart pieChart;
     private TextView howMuch;
     private TextView day;
+    private long epochMilli;
     private MMKVBillStorage mmkvBillStorage;
     //true表示收入 false表示支出
     private boolean pieAccount = true;
@@ -124,12 +125,12 @@ public class AnalyseFragment extends Fragment {
         howMuch.setText(s);
         day.setText("累计记账时长" + BillStatisticsUtils.calculateRecordedDays(allBills) + "天");
         setLineChartData();
+        initRecyclerView(epochMilli);
     }
 
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
         binding.rvBill.setLayoutManager(layoutManager);
-
         List<Bill> bills = mmkvBillStorage.getAllBills();
         BillShowAdapter billShowAdapter = new BillShowAdapter(bills,getContext());
         binding.rvBill.setAdapter(billShowAdapter);
@@ -153,7 +154,7 @@ public class AnalyseFragment extends Fragment {
                 LocalDateTime localDateTime = localDate.atStartOfDay();
                 ZoneId zoneId = ZoneId.systemDefault();
                 ZonedDateTime zonedDateTime = localDateTime.atZone(zoneId);
-                long epochMilli = zonedDateTime.toInstant().toEpochMilli();
+                epochMilli = zonedDateTime.toInstant().toEpochMilli();
                 initRecyclerView(epochMilli);
             }
         });

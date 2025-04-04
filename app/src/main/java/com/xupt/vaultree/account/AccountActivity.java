@@ -1,6 +1,7 @@
 package com.xupt.vaultree.account;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -14,11 +15,15 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -86,7 +91,12 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         super.onCreate(savedInstanceState);
         binding = ActivityAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        EdgeToEdge.enable(this);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         mmkvBillStorage = new MMKVBillStorage();
         initViews();
         initData();
@@ -113,8 +123,6 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         binding.recordTabs.setTabMode(TabLayout.MODE_FIXED);
         binding.recordTabs.setTabRippleColor(null);
         binding.recordTabs.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.orange));
-        binding.recordTabs.getTabAt(0).setIcon(R.drawable.bonus);
-        binding.recordTabs.getTabAt(1).setIcon(R.drawable.ic_cash);
         binding.recordTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -157,13 +165,6 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         binding.tbNoteClear.setOnClickListener(this);
         binding.tbCalcNumDel.setOnClickListener(this);
         binding.ibClear.setOnClickListener(this);
-//        binding.tbNoteMoney.setOnFocusChangeListener((v, hasFocus) -> {
-//            binding.moneyContainer.setStrokeWidth(hasFocus ? 2 : 1);
-//            binding.moneyContainer.setStrokeColor(ContextCompat.getColorStateList(
-//                    this,
-//                    hasFocus ? R.color.bright_yellow : R.color.orange
-//            ));
-//        });
     }
 
     private void setupChips() {
@@ -262,21 +263,6 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         binding.tvPayment.setText(currentPaymentMethod.getName());
     }
 
-
-//    private void showDatePicker() {
-//        Calendar calendar = Calendar.getInstance();
-//        DatePickerDialog dialog = new DatePickerDialog(
-//                this,
-//                (view, year, month, dayOfMonth) -> {
-//                    selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, dayOfMonth);
-//                    binding.chipDate.setText(selectedDate);
-//                },
-//                calendar.get(Calendar.YEAR),
-//                calendar.get(Calendar.MONTH),
-//                calendar.get(Calendar.DAY_OF_MONTH)
-//        );
-//        dialog.show();
-//    }
     private void showDatePicker() {
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("选择日期")
@@ -342,7 +328,7 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         binding.chipNote.setText(!input.isEmpty() ? input : "点击添加备注");
     }
 
-    private void doCommit() {
+private void doCommit() {
         if ((num + dotNum).equals("0.00")) {
             Toast.makeText(this, "请输入有效的金额", Toast.LENGTH_SHORT).show();
             return;
@@ -354,13 +340,16 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         if (isEdit && currentBill != null) {
             mmkvBillStorage.updateBill(bill);
             Toast.makeText(this, "账单更新成功", Toast.LENGTH_SHORT).show();
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("updated_bill", bill);
+            setResult(RESULT_OK, resultIntent);
         } else {
             mmkvBillStorage.saveBill(bill);
             Toast.makeText(this, "账单保存成功", Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK);
         }
 
-        resetInputFields();
-        finish();
+        finish(); // 确保调用 finish()
     }
     // 添加成员变量保存当前选中的分类
     private IconItem currentSelectedIcon=new IconItem(R.drawable.ic_noknow, "未知");
@@ -388,12 +377,19 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         if (noteText.equals("点击添加备注")) {
             noteText = "";
         }
+
+        // 确保支付方式索引有效
+        int paymentIndex = selectedPaymentIndex;
+        if (paymentIndex < 0 || paymentIndex >= paymentMethods.size()) {
+            paymentIndex = 0; // 使用默认支付方式
+        }
+
         return new Bill(
                 isEdit && currentBill != null ? currentBill.getId() : System.currentTimeMillis(),
                 amount,
                 noteText,
-                paymentMethods.get(selectedPaymentIndex).getName(),
-                currentPaymentMethod.getIconResId(),
+                paymentMethods.get(paymentIndex).getName(),
+                paymentMethods.get(paymentIndex).getIconResId(),
                 dateMillis,
                 isIncome,
                 currentSelectedIcon.getIconName(),
@@ -411,11 +407,19 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
             binding.chipNote.setText(remarkInput);
         }
 
-        selectedPaymentIndex = paymentMethods.indexOf(bill.getPayName());
+        // 修复支付方式索引获取逻辑
+        selectedPaymentIndex = 0; // 默认值
+        for (int i = 0; i < paymentMethods.size(); i++) {
+            if (paymentMethods.get(i).getName().equals(bill.getPayName())) {
+                selectedPaymentIndex = i;
+                break;
+            }
+        }
 
         binding.tbNoteMoney.setText(String.format(Locale.getDefault(), "%.2f", bill.getAmount()));
         selectedDate = formatDate(bill.getDateMillis());
         binding.chipDate.setText(selectedDate);
+
         // 恢复分类图标和文本
         binding.tbLabel.setText(bill.getCategoryIconName());
         binding.tbNoteClear.setImageResource(bill.getCategoryIconResId());
