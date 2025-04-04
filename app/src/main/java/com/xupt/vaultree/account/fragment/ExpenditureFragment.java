@@ -52,13 +52,7 @@ import java.util.List;
 //    private boolean isExpanded = false;
 //    private boolean isAnimating = false;
 //
-//    @Override
-//    public void onDestroyView() {
-//        // 重置动画状态
-//        binding.bgOverlay.clearAnimation();
-//        binding.bgOverlay.setVisibility(View.INVISIBLE);
-//        super.onDestroyView();
-//    }
+
 
 
 public class ExpenditureFragment extends Fragment {
