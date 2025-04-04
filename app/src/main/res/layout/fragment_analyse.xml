@@ -58,6 +58,14 @@
 
                 <include layout="@layout/card_count" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_bill"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_count"/>
+
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChart"
                     android:layout_width="match_parent"
@@ -66,7 +74,7 @@
                     android:layout_margin="20dp"
                     android:background="@drawable/chart_bg"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/card_count" />
+                    app:layout_constraintTop_toBottomOf="@+id/rv_bill" />
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pieChart"

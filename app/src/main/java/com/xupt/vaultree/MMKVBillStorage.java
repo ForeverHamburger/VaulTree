@@ -40,6 +40,7 @@ public class MMKVBillStorage {
         Type type = new TypeToken<List<Bill>>(){}.getType();
         return new Gson().fromJson(json, type);
     }
+
     public Bill getBillById(long id) {
         List<Bill> bills = getAllBills();
         for (Bill bill : bills) {
