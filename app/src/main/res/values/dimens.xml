@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="dialog_margin">32dp</dimen>
+</resources>

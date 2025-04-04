@@ -44,4 +44,7 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+    implementation 'com.caverock:androidsvg:1.4'
+    implementation 'com.tencent:mmkv:1.2.15'
+    implementation 'com.google.code.gson:gson:2.8.6'
 }

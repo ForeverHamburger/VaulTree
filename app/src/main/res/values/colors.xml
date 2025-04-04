@@ -12,4 +12,11 @@
     <color name="emerald_green">#A5CEBD</color>
     <color name="dark_green">#608B7A</color>
     <color name="bright_yellow">#FFC530</color>
+
+    <color name="or3">#FCCB8C</color>
+    <color name="or4">#FEE4C8</color>
+    <color name="gray">#696969</color>
+    <color name="income_color">#4CAF50</color>
+    <color name="expense_color">#F44336</color>
+
 </resources>
