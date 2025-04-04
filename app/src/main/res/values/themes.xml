@@ -7,15 +7,84 @@
     <!--水平装饰线-->
     <style name="horizontal_decoration_style">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1px</item>
-        <item name="android:background">#999999</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@color/black</item>
     </style>
     <!--竖直装饰线-->
     <style name="vertical_decoration_style">
-        <item name="android:layout_width">1px</item>
+        <item name="android:layout_width">2dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">#999999</item>
     </style>
+    <style name="MaterialDatePickerTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <!-- 日历整体背景 -->
+        <item name="materialCalendarStyle">@style/MyMaterialCalendar</item>
+<!--         头部样式 -->
+<!--        <item name="materialCalendarFullscreenTheme">@style/MyMaterialCalendarHeader</item>-->
+        <!-- 选中日期样式 -->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/or3</item>
+    </style>
+
+    <style name="MyMaterialCalendar" parent="Widget.MaterialComponents.MaterialCalendar">
+        <item name="android:windowBackground">@color/or1</item>
+        <item name="rangeFillColor">@color/or2</item>
+    </style>
+
+
+    <style name="ThemeOverlay.MaterialComponents.Dialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="colorControlActivated">@color/orange</item>
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="dialogCornerRadius">12dp</item>
+    </style>
+    <style name="CalcButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/bg_calc_button</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">0dp</item>
+    </style>
+
+    <style name="CalcFunctionButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/bg_calc_button</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="CalcDoneButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="backgroundTint">#FFD54F</item>  <!-- 深黄色背景 -->
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">20sp</item>
+        <item name="cornerRadius">0dp</item>
+    </style>
+
+    <style name="DividerHorizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">#E0E0E0</item>
+    </style>
+
+    <style name="DividerVertical">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">#E0E0E0</item>
+    </style>
+
+<!--    <style name="MyMaterialCalendarHeader" parent="Widget.MaterialComponents.MaterialCalendar.Header">-->
+<!--        <item name="android:textColor">@color/primary</item>-->
+<!--        <item name="android:background">@color/primary_light</item>-->
+<!--    </style>-->
 
     <style name="Theme.VaulTree" parent="Base.Theme.VaulTree" />
 

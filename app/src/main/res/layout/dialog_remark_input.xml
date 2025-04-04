@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="8dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="写点什么"
+        app:boxStrokeColor="@color/black"
+        app:hintTextColor="@color/or1"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:boxBackgroundMode="outline"
+        app:endIconMode="clear_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:minLines="2"
+            android:textColorHint="@color/emerald_green"
+            android:inputType="textMultiLine"
+            android:textStyle="bold"
+            android:background="@null"
+            android:maxLength="200"
+            android:textCursorDrawable="@drawable/shape_cur"
+            android:textColor="@color/or2"
+            android:textSize="16sp"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

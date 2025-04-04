@@ -1,14 +1,14 @@
 package com.xupt.vaultree.account;
 
-import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -25,8 +26,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.xupt.vaultree.Bill;
 import com.xupt.vaultree.MMKVBillStorage;
+import com.xupt.vaultree.MainActivity;
 import com.xupt.vaultree.R;
 import com.xupt.vaultree.account.Adapter.IconAdapter;
 import com.xupt.vaultree.account.database.IconItem;
@@ -99,15 +102,68 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         MyPagerAdapter pagerAdapter = new MyPagerAdapter(this, fragmentList);
         binding.recordVp.setAdapter(pagerAdapter);
 
-        new TabLayoutMediator(binding.recordTabs, binding.recordVp,
-                (tab, position) -> tab.setText(tabTitles.get(position))).attach();
+//        new TabLayoutMediator(binding.recordTabs, binding.recordVp,
+//                (tab, position) -> tab.setText(tabTitles.get(position))).attach();
+        new TabLayoutMediator(binding.recordTabs, binding.recordVp, (tab, position) -> {
+            View customView = LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+            TextView tabTextView = customView.findViewById(R.id.tabTextView);
+            tabTextView.setText(tabTitles.get(position));
+            tab.setCustomView(customView);
+        }).attach();
+        binding.recordTabs.setTabMode(TabLayout.MODE_FIXED);
+        binding.recordTabs.setTabRippleColor(null);
+        binding.recordTabs.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.orange));
+        binding.recordTabs.getTabAt(0).setIcon(R.drawable.bonus);
+        binding.recordTabs.getTabAt(1).setIcon(R.drawable.ic_cash);
+        binding.recordTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab != null && tab.getCustomView() != null) {
+                    TextView tabTextView = tab.getCustomView().findViewById(R.id.tabTextView);
+                    if (tabTextView != null) {
+                        tabTextView.animate()
+                                .scaleX(1.5f)
+                                .scaleY(1.5f)
+                                .setDuration(200)
+                                .start();
+                        tabTextView.setTextColor(ContextCompat.getColor(AccountActivity.this, R.color.orange));
+                    }
+                }
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                if (tab != null && tab.getCustomView() != null) {
+                    TextView tabTextView = tab.getCustomView().findViewById(R.id.tabTextView);
+                    if (tabTextView != null) {
+                        tabTextView.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(200)
+                                .start();
+                        tabTextView.setTextColor(ContextCompat.getColor(AccountActivity.this, R.color.gray));
+                    }
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                // 可选逻辑
+            }
+        });
         // 设置点击监听器
         binding.tbCalcNumDone.setOnClickListener(this);
         binding.tbCalcNumDot.setOnClickListener(this);
         binding.tbNoteClear.setOnClickListener(this);
         binding.tbCalcNumDel.setOnClickListener(this);
         binding.ibClear.setOnClickListener(this);
+//        binding.tbNoteMoney.setOnFocusChangeListener((v, hasFocus) -> {
+//            binding.moneyContainer.setStrokeWidth(hasFocus ? 2 : 1);
+//            binding.moneyContainer.setStrokeColor(ContextCompat.getColorStateList(
+//                    this,
+//                    hasFocus ? R.color.bright_yellow : R.color.orange
+//            ));
+//        });
     }
 
     private void setupChips() {
@@ -207,51 +263,83 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
     }
 
 
+//    private void showDatePicker() {
+//        Calendar calendar = Calendar.getInstance();
+//        DatePickerDialog dialog = new DatePickerDialog(
+//                this,
+//                (view, year, month, dayOfMonth) -> {
+//                    selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, dayOfMonth);
+//                    binding.chipDate.setText(selectedDate);
+//                },
+//                calendar.get(Calendar.YEAR),
+//                calendar.get(Calendar.MONTH),
+//                calendar.get(Calendar.DAY_OF_MONTH)
+//        );
+//        dialog.show();
+//    }
     private void showDatePicker() {
-        Calendar calendar = Calendar.getInstance();
-        DatePickerDialog dialog = new DatePickerDialog(
-                this,
-                (view, year, month, dayOfMonth) -> {
-                    selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, dayOfMonth);
-                    binding.chipDate.setText(selectedDate);
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        );
-        dialog.show();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("选择日期")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setTheme(R.style.MaterialDatePickerTheme)
+                .build();
+
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(selection);
+            selectedDate = String.format(Locale.getDefault(), "%d-%02d-%02d",
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH) + 1,
+                    calendar.get(Calendar.DAY_OF_MONTH));
+            binding.chipDate.setText(selectedDate);
+        });
+
+        datePicker.show(getSupportFragmentManager(), "DATE_PICKER");
     }
-
     private void showRemarkDialog() {
-        TextInputEditText inputEditText = new TextInputEditText(this);
+        // 1. 使用自定义布局文件（推荐）
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.dialog_remark_input, null);
+
+        // 2. 获取输入框并设置初始状态
+        TextInputLayout inputLayout = dialogView.findViewById(R.id.input_layout);
+        TextInputEditText inputEditText = dialogView.findViewById(R.id.et_remark);
+
         inputEditText.setText(remarkInput);
-        inputEditText.setHint("写点什么");
-        inputEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+        inputLayout.setHint("写点什么");
+        inputEditText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES |
+                InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-        );
-        int margin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-        layoutParams.setMargins(margin, 0, margin, 0);
-        inputEditText.setLayoutParams(layoutParams);
+        // 3. 自动弹出软键盘
+        inputEditText.postDelayed(() -> {
+            inputEditText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(inputEditText, InputMethodManager.SHOW_IMPLICIT);
+        }, 100);
 
-        inputEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(200)});
-
-        new MaterialAlertDialogBuilder(this)
+        // 4. 构建对话框
+        new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_MaterialComponents_Dialog)
                 .setTitle("备注")
-                .setView(inputEditText)
+                .setIcon(R.drawable.ic_beizhu)
+                .setView(dialogView)
                 .setPositiveButton("确定", (dialog, which) -> {
                     String input = inputEditText.getText().toString().trim();
-                    remarkInput = input;
-                    if (!input.isEmpty()) {
-                        binding.chipNote.setText(input);
-                    } else {
-                        binding.chipNote.setText("点击添加备注");
-                    }
+                    updateRemarkUI(input);
                 })
-                .setNegativeButton("取消", null)
+                .setNegativeButton("取消", (dialog, which) -> {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0);
+                })
+                .setOnDismissListener(dialog -> {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0);
+                })
                 .show();
+    }
+
+    private void updateRemarkUI(String input) {
+        remarkInput = input;
+        binding.chipNote.setText(!input.isEmpty() ? input : "点击添加备注");
     }
 
     private void doCommit() {

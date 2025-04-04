@@ -2,8 +2,8 @@
     android:shape="oval">
     <solid android:color="@color/white"/>
     <stroke
-        android:width="3dp"
-        android:color="@color/or2"/>
+        android:width="2dp"
+        android:color="@color/orange"/>
     <size
         android:width="64dp"
         android:height="64dp"/>
