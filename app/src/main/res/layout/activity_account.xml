@@ -20,6 +20,7 @@
         app:tabIndicatorColor="@color/orange"
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/orange"
+        app:tabIndicator="@drawable/tab_bg"
         app:tabTextAppearance="@style/TextAppearance.AppCompat.Title.Inverse"
         app:tabTextColor="@color/gray" />
 

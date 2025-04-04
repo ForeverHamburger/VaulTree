@@ -113,8 +113,6 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         binding.recordTabs.setTabMode(TabLayout.MODE_FIXED);
         binding.recordTabs.setTabRippleColor(null);
         binding.recordTabs.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.orange));
-        binding.recordTabs.getTabAt(0).setIcon(R.drawable.bonus);
-        binding.recordTabs.getTabAt(1).setIcon(R.drawable.ic_cash);
         binding.recordTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -157,13 +155,6 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         binding.tbNoteClear.setOnClickListener(this);
         binding.tbCalcNumDel.setOnClickListener(this);
         binding.ibClear.setOnClickListener(this);
-//        binding.tbNoteMoney.setOnFocusChangeListener((v, hasFocus) -> {
-//            binding.moneyContainer.setStrokeWidth(hasFocus ? 2 : 1);
-//            binding.moneyContainer.setStrokeColor(ContextCompat.getColorStateList(
-//                    this,
-//                    hasFocus ? R.color.bright_yellow : R.color.orange
-//            ));
-//        });
     }
 
     private void setupChips() {
