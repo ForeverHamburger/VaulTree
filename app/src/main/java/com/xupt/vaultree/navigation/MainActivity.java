@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction = supportFragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fcv_main ,navigationInfos.get(0).getFragment())
                 .add(R.id.fcv_main ,navigationInfos.get(1).getFragment())
-                .hide(navigationInfos.get(0).getFragment())
                 .hide(navigationInfos.get(1).getFragment())
                 .commit();
 
