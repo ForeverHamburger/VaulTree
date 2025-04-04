@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,6 +32,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.necer.enumeration.DateChangeBehavior;
@@ -46,6 +49,8 @@ public class AnalyseFragment extends Fragment {
     private FragmentAnalyseBinding binding;
     LineChart lineChart;
     PieChart pieChart;
+    //true表示支出 false表示收入
+    private boolean pieAccount = true;
     public AnalyseFragment() {
         // Required empty public constructor
     }
@@ -218,9 +223,47 @@ public class AnalyseFragment extends Fragment {
         pieChart.setHoleRadius(58f);
         pieChart.setTransparentCircleRadius(61f);
         pieChart.setRotationAngle(0);
+        pieChart.setTouchEnabled(true);
+
+
+        //设置中心部分的字  （一般中间白色圆不隐藏的情况下才设置）
+        pieChart.setCenterText("总支出\n100元");
+        //设置中心字的字体颜色
+        pieChart.setCenterTextColor(Color.BLACK);
+        //设置中心字的字体大小
+        pieChart.setCenterTextSize(12f);
+
+        pieChart.setOnChartGestureListener(new OnChartGestureListener() {
+            @Override
+            public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {}
+            @Override
+            public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture){}
+            @Override
+            public void onChartLongPressed(MotionEvent me) {}
+            @Override
+            public void onChartDoubleTapped(MotionEvent me) {}
+            @Override
+            public void onChartSingleTapped(MotionEvent me) {
+                if (pieAccount) {
+                    pieChart.setCenterText("总收入\n100元");
+                    setPieChartData();
+                } else {
+                    pieChart.setCenterText("总支出\n100元");
+                    setPieChartData();
+                }
+                pieAccount = !pieAccount;
+                pieChart.animateY(1400);
+            }
+            @Override
+            public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {}
+            @Override
+            public void onChartScale(MotionEvent me, float scaleX, float scaleY) {}
+            @Override
+            public void onChartTranslate(MotionEvent me, float dX, float dY) {}
+        });
 
         // 设置饼图大小
-        pieChart.setExtraOffsets(10f,40f,10f,32f);
+        pieChart.setExtraOffsets(20f,20f,20f,40f);
 
         // 启用旋转
         pieChart.setRotationEnabled(true);
@@ -231,19 +274,6 @@ public class AnalyseFragment extends Fragment {
 
         // 设置出场动画
         pieChart.animateY(1400); // 动画持续时间为1400毫秒
-
-        // 启用点击事件
-        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                // 处理点击事件
-            }
-
-            @Override
-            public void onNothingSelected() {
-                // 未选中任何部分时的处理
-            }
-        });
     }
 
     // 设置饼状图数据

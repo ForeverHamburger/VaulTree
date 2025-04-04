@@ -42,8 +42,7 @@ public class NavigationActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        getWindow().setStatusBarColor(getResources().getColor(R.color.grey_bg));
-
+        setWindowColor(R.color.orange);
         List<NavigationInfo> navigationInfos = new ArrayList<>();
         navigationInfos.add(new NavigationInfo("统计",new AnalyseFragment()));
         navigationInfos.add(new NavigationInfo("我的",new MineFragment()));

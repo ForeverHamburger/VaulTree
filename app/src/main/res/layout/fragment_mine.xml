@@ -111,7 +111,7 @@
         android:textColor="@color/white"
         android:fontFamily="@font/content_font"
         android:textSize="20sp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="120dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/btn_background"
