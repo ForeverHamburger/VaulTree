@@ -58,13 +58,24 @@
 
                 <include layout="@layout/card_count" />
 
+                <TextView
+                    android:id="@+id/tv_bill_rv_name"
+                    android:text="当日账单一览"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/content_font"
+                    app:layout_constraintTop_toBottomOf="@+id/card_count"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_margin="20dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_bill"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/card_count"/>
+                    app:layout_constraintTop_toBottomOf="@+id/tv_bill_rv_name"/>
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChart"
@@ -76,6 +87,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rv_bill" />
 
+                <TextView
+                    android:id="@+id/tv_bill_lc_name"
+                    android:text="近七日收入统计"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/content_font"
+                    app:layout_constraintTop_toTopOf="@+id/lineChart"
+                    app:layout_constraintStart_toStartOf="@+id/lineChart" />
+
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pieChart"
                     android:layout_width="match_parent"
@@ -84,6 +106,17 @@
                     app:layout_constraintTop_toBottomOf="@id/lineChart"
                     app:layout_constraintStart_toStartOf="parent" />
 
+                <TextView
+                    android:id="@+id/tv_bill_pc_name"
+                    android:text="分类统计"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:layout_margin="20dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/content_font"
+                    app:layout_constraintTop_toTopOf="@+id/pieChart"
+                    app:layout_constraintStart_toStartOf="@+id/pieChart" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="120dp"

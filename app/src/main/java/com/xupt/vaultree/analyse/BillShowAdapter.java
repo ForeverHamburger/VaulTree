@@ -6,6 +6,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,6 +56,18 @@ public class BillShowAdapter extends RecyclerView.Adapter<BillShowAdapter.BillSh
         holder.payTime.setText(formattedDate);
         holder.payName.setText(bill.getCategoryIconName());
         holder.image.setImageResource(bill.getCategoryIconResId());
+
+
+        // 添加从右侧滑入的动画
+        Animation slideInAnimation = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 1.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f
+        );
+        slideInAnimation.setDuration(300); // 动画持续时间，单位毫秒
+        slideInAnimation.setFillAfter(true); // 动画结束后保持最后状态
+        holder.itemView.startAnimation(slideInAnimation);
     }
 
     @Override

@@ -11,12 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -125,6 +129,7 @@ public class AnalyseFragment extends Fragment {
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
         binding.rvBill.setLayoutManager(layoutManager);
+
         List<Bill> bills = mmkvBillStorage.getAllBills();
         BillShowAdapter billShowAdapter = new BillShowAdapter(bills,getContext());
         binding.rvBill.setAdapter(billShowAdapter);
@@ -312,7 +317,7 @@ public class AnalyseFragment extends Fragment {
     private void initPieChart() {
         pieChart.setUsePercentValues(true); // 使用百分比显示
         pieChart.getDescription().setEnabled(false); // 隐藏描述
-        pieChart.setExtraOffsets(5, 10, 5, 5);
+        pieChart.setExtraOffsets(5, 20, 5, 5);
         pieChart.setDragDecelerationFrictionCoef(0.95f);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.WHITE);
@@ -361,7 +366,7 @@ public class AnalyseFragment extends Fragment {
         });
 
         // 设置饼图大小
-        pieChart.setExtraOffsets(20f,20f,20f,40f);
+        pieChart.setExtraOffsets(20f,30f,20f,40f);
 
         // 启用旋转
         pieChart.setRotationEnabled(true);
@@ -371,7 +376,7 @@ public class AnalyseFragment extends Fragment {
         pieChart.getLegend().setEnabled(false);
 
         // 设置出场动画
-        pieChart.animateY(1400); // 动画持续时间为1400毫秒
+        pieChart.animateY(700);
     }
     // 设置饼状图数据
     private void setPieChartData(Boolean isIncome) {
