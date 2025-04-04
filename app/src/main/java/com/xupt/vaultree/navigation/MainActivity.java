@@ -1,22 +1,32 @@
-package com.xupt.vaultree;
+package com.xupt.vaultree.navigation;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.navigation.NavigationBarView;
+import com.xupt.vaultree.R;
 import com.xupt.vaultree.analyse.AnalyseFragment;
 import com.xupt.vaultree.databinding.ActivityMainBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
+    private boolean isSelected = false;
+    private FragmentManager supportFragmentManager;
+    private FragmentTransaction fragmentTransaction;
     private static final int DOUBLE_CLICK_TIME_DELAY = 2000;
     private long firstBackPressedTime = 0;
 
@@ -32,13 +42,42 @@ public class MainActivity extends AppCompatActivity {
         });
         getWindow().setStatusBarColor(getResources().getColor(R.color.white));
 
-        FragmentManager supportFragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+        List<NavigationInfo> navigationInfos = new ArrayList<>();
+        navigationInfos.add(new NavigationInfo("统计",new AnalyseFragment()));
+        navigationInfos.add(new NavigationInfo("我的",new AnalyseFragment()));
+
+        supportFragmentManager = getSupportFragmentManager();
+        fragmentTransaction = supportFragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fcv_main ,new AnalyseFragment())
+                .add(R.id.fcv_main ,new AnalyseFragment())
+                .hide(new AnalyseFragment())
+                .hide(new AnalyseFragment())
                 .commit();
 
-        binding.bnvNavigation.setItemIconTintList(null);
 
+        binding.bnvNavigation.setItemIconTintList(null);
+        binding.bnvNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                isSelected = false;
+                // 根据导航项的标题进行不同的处理
+                getFragment(menuItem.getTitle(),navigationInfos);
+                return true;
+            }
+
+            private Fragment getFragment(CharSequence title, List<NavigationInfo> navigationInfos) {
+                FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+                for (NavigationInfo navigationInfo : navigationInfos) {
+                    if (title.equals(navigationInfo.getFragmentName())){
+                        fragmentTransaction.show(navigationInfo.getFragment());
+                    } else {
+                        fragmentTransaction.hide(navigationInfo.getFragment());
+                    }
+                }
+                fragmentTransaction.commit();
+                return null;
+            }
+        });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override

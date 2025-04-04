@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.xupt.vaultree.MainActivity;
+import com.xupt.vaultree.navigation.MainActivity;
 import com.xupt.vaultree.R;
 import com.xupt.vaultree.databinding.ActivitySplashBinding;
 
