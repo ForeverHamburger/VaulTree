@@ -1,6 +1,7 @@
 package com.xupt.vaultree.account;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -327,7 +328,7 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         binding.chipNote.setText(!input.isEmpty() ? input : "点击添加备注");
     }
 
-    private void doCommit() {
+private void doCommit() {
         if ((num + dotNum).equals("0.00")) {
             Toast.makeText(this, "请输入有效的金额", Toast.LENGTH_SHORT).show();
             return;
@@ -339,13 +340,16 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         if (isEdit && currentBill != null) {
             mmkvBillStorage.updateBill(bill);
             Toast.makeText(this, "账单更新成功", Toast.LENGTH_SHORT).show();
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("updated_bill", bill);
+            setResult(RESULT_OK, resultIntent);
         } else {
             mmkvBillStorage.saveBill(bill);
             Toast.makeText(this, "账单保存成功", Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK);
         }
 
-        resetInputFields();
-        finish();
+        finish(); // 确保调用 finish()
     }
     // 添加成员变量保存当前选中的分类
     private IconItem currentSelectedIcon=new IconItem(R.drawable.ic_noknow, "未知");
@@ -373,12 +377,19 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
         if (noteText.equals("点击添加备注")) {
             noteText = "";
         }
+
+        // 确保支付方式索引有效
+        int paymentIndex = selectedPaymentIndex;
+        if (paymentIndex < 0 || paymentIndex >= paymentMethods.size()) {
+            paymentIndex = 0; // 使用默认支付方式
+        }
+
         return new Bill(
                 isEdit && currentBill != null ? currentBill.getId() : System.currentTimeMillis(),
                 amount,
                 noteText,
-                paymentMethods.get(selectedPaymentIndex).getName(),
-                currentPaymentMethod.getIconResId(),
+                paymentMethods.get(paymentIndex).getName(),
+                paymentMethods.get(paymentIndex).getIconResId(),
                 dateMillis,
                 isIncome,
                 currentSelectedIcon.getIconName(),
@@ -396,11 +407,19 @@ public class AccountActivity extends AppCompatActivity implements IconAdapter.On
             binding.chipNote.setText(remarkInput);
         }
 
-        selectedPaymentIndex = paymentMethods.indexOf(bill.getPayName());
+        // 修复支付方式索引获取逻辑
+        selectedPaymentIndex = 0; // 默认值
+        for (int i = 0; i < paymentMethods.size(); i++) {
+            if (paymentMethods.get(i).getName().equals(bill.getPayName())) {
+                selectedPaymentIndex = i;
+                break;
+            }
+        }
 
         binding.tbNoteMoney.setText(String.format(Locale.getDefault(), "%.2f", bill.getAmount()));
         selectedDate = formatDate(bill.getDateMillis());
         binding.chipDate.setText(selectedDate);
+
         // 恢复分类图标和文本
         binding.tbLabel.setText(bill.getCategoryIconName());
         binding.tbNoteClear.setImageResource(bill.getCategoryIconResId());

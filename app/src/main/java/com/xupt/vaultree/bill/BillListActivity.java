@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class BillListActivity extends AppCompatActivity {
-
+    private static final int REQUEST_EDIT_BILL = 1001;
     private MMKVBillStorage billStorage;
     private Bill currentBill;
     private ActivityBillListBinding binding; // 假设使用了视图绑定
@@ -179,8 +179,19 @@ public class BillListActivity extends AppCompatActivity {
 
     private void editBill() {
         Intent intent = new Intent(this, AccountActivity.class);
-        intent.putExtra("bill_id", currentBill.getId());
-        startActivityForResult(intent, 1001);
+        intent.putExtra("billId", currentBill.getId());
+        startActivityForResult(intent, REQUEST_EDIT_BILL);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EDIT_BILL && resultCode == RESULT_OK) {
+            if (currentBill != null) {
+                loadBillData(currentBill.getId());
+                sendBroadcast(new Intent("BILL_UPDATED"));
+            }
+        }
     }
 
     private void deleteBill() {
@@ -197,11 +208,4 @@ public class BillListActivity extends AppCompatActivity {
                 .show();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1001 && resultCode == RESULT_OK) {
-            loadBillData(currentBill.getId());
-        }
-    }
 }
