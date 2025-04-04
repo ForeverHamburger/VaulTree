@@ -20,6 +20,7 @@ import com.xupt.vaultree.R;
 import com.xupt.vaultree.account.AccountActivity;
 import com.xupt.vaultree.analyse.AnalyseFragment;
 import com.xupt.vaultree.databinding.ActivityMainBinding;
+import com.xupt.vaultree.mine.MineFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +47,14 @@ public class MainActivity extends AppCompatActivity {
 
         List<NavigationInfo> navigationInfos = new ArrayList<>();
         navigationInfos.add(new NavigationInfo("统计",new AnalyseFragment()));
-        navigationInfos.add(new NavigationInfo("我的",new AnalyseFragment()));
+        navigationInfos.add(new NavigationInfo("我的",new MineFragment()));
 
         supportFragmentManager = getSupportFragmentManager();
         fragmentTransaction = supportFragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fcv_main ,new AnalyseFragment())
-                .add(R.id.fcv_main ,new AnalyseFragment())
-                .hide(new AnalyseFragment())
-                .hide(new AnalyseFragment())
+        fragmentTransaction.add(R.id.fcv_main ,navigationInfos.get(0).getFragment())
+                .add(R.id.fcv_main ,navigationInfos.get(1).getFragment())
+                .hide(navigationInfos.get(0).getFragment())
+                .hide(navigationInfos.get(1).getFragment())
                 .commit();
 
 

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mine.MineFragment">
+
+
+    <LinearLayout
+        android:id="@+id/ll_edit_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="我的"
+            android:fontFamily="@font/title_font"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_edit_head_container"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="20dp"
+        app:cardCornerRadius="70dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_edit_top">
+
+        <ImageView
+            android:id="@+id/iv_edit_user_head"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_people" />
+    </androidx.cardview.widget.CardView>
+    <!-- 用户名 -->
+    <TextView
+        android:id="@+id/tv_username_label"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="用户名"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_edit_head_container" />
+
+    <EditText
+        android:id="@+id/et_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="VT10001"
+        android:textSize="16sp"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_username_label"
+        app:layout_constraintTop_toTopOf="@id/tv_username_label"
+        android:layout_marginStart="16dp"/>
+
+    <!-- ID -->
+    <TextView
+        android:id="@+id/tv_id_label"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="ID"
+        android:textSize="16sp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_username"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/et_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="uid103516237"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_id_label"
+        app:layout_constraintTop_toTopOf="@id/tv_id_label"
+        android:layout_marginStart="16dp"/>
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="信息清零"
+        android:textColor="@color/white"
+        android:fontFamily="@font/content_font"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/btn_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
