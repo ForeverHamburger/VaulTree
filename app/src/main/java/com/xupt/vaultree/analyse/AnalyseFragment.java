@@ -33,9 +33,12 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.necer.enumeration.DateChangeBehavior;
+import com.necer.listener.OnCalendarChangedListener;
 import com.xupt.vaultree.R;
 import com.xupt.vaultree.databinding.FragmentAnalyseBinding;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,12 +76,24 @@ public class AnalyseFragment extends Fragment {
         initLineChart();
         // 设置数据
         setLineChartData();
-
         // 初始化饼状图
         initPieChart();
         // 设置饼状图数据
         setPieChartData();
+
+        setCalendar();
     }
+
+    private void setCalendar() {
+        binding.monthCalendar.setOnCalendarChangedListener(new OnCalendarChangedListener() {
+            @Override
+            public void onCalendarChange(int i, int i1, LocalDate localDate, DateChangeBehavior dateChangeBehavior) {
+                binding.tvMonth.setText(i1 + "月");
+                binding.tvYear.setText(i + "年");
+            }
+        });
+    }
+
     // 初始化图表
     private void initLineChart() {
         lineChart.setBackgroundColor(Color.TRANSPARENT);
