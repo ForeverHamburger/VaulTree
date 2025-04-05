@@ -32,25 +32,6 @@
             android:gravity="center" />
     </LinearLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_edit_head_container"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:cardCornerRadius="70dp"
-        app:cardElevation="0dp"
-        android:layout_marginLeft="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ll_edit_top"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ll_edit_top">
-
-        <ImageView
-            android:id="@+id/iv_edit_user_head"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_people" />
-    </androidx.cardview.widget.CardView>
     <!-- 用户名 -->
     <TextView
         android:id="@+id/tv_username_label"

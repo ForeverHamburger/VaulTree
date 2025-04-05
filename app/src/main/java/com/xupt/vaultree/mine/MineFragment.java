@@ -64,7 +64,7 @@ public class MineFragment extends Fragment {
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("确认清除数据");
-        builder.setMessage("确定要清除所有数据吗？");
+        builder.setMessage("确定要清除所有数据吗？(会清除本机全部零信任相关数据以及账单数据)");
         builder.setPositiveButton("确定", (dialogInterface, i) -> {
             // 确认清除数据
             dialog.passDetect();
