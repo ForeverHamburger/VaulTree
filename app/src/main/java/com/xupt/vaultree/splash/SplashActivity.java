@@ -52,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
                         Intent intent = new Intent(SplashActivity.this, NavigationActivity.class);
                         startActivity(intent);
                         finish(); // 关闭当前的 SplashActivity
-                    },1000);
+                    },500);
                 } else {
                     detectDialog.notPassDetect();
                 }

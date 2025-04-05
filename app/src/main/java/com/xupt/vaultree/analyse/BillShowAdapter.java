@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.xupt.vaultree.Bill;
 import com.xupt.vaultree.R;
 import com.xupt.vaultree.bill.BillListActivity;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class BillShowAdapter extends RecyclerView.Adapter<BillShowAdapter.BillShowViewHolder> {
@@ -96,19 +98,42 @@ public class BillShowAdapter extends RecyclerView.Adapter<BillShowAdapter.BillSh
 
         public void bind(Bill bill) {
             itemView.setOnClickListener(view -> {
-                Log.e("logaa", "bind: " );
-                Context context = itemView.getContext();
-                Intent intent = new Intent(context, BillListActivity.class);
-                intent.putExtra("billId", bill.getId());
-                if (context instanceof Activity) {
-                    Log.e("logaa", "Activity: "+bill.getId() );
 
-                    ((Activity) context).startActivity(intent);
-                } else {
-                    Log.e("logaa", "Activityno " );
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }
+                // 放大动画
+                ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f);
+                ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f);
+                scaleXAnimator.setDuration(100);
+                scaleYAnimator.setDuration(100);
+                scaleXAnimator.start();
+                scaleYAnimator.start();
+
+                // 恢复原状动画
+                scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1.1f, 1f);
+                scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1.1f, 1f);
+                scaleXAnimator.setStartDelay(100);
+                scaleYAnimator.setStartDelay(100);
+                scaleXAnimator.setDuration(100);
+                scaleYAnimator.setDuration(100);
+                scaleXAnimator.start();
+                scaleYAnimator.start();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("logaa", "bind: " );
+                        Context context = itemView.getContext();
+                        Intent intent = new Intent(context, BillListActivity.class);
+                        intent.putExtra("billId", bill.getId());
+                        if (context instanceof Activity) {
+                            Log.e("logaa", "Activity: "+bill.getId() );
+
+                            ((Activity) context).startActivity(intent);
+                        } else {
+                            Log.e("logaa", "Activityno " );
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
+                        }
+                    }
+                },180);
             });
         }
 

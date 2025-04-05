@@ -42,6 +42,7 @@
             app:elevation="0dp"
             android:background="@color/transparent"
             app:itemBackground="@color/transparent"
+            app:labelVisibilityMode="unlabeled"
             app:itemTextColor="@color/black"
             app:itemTextAppearanceActive="@style/BnvStyle"
             app:layout_anchor="@+id/bab_navigation"

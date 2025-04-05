@@ -34,7 +34,7 @@ public class DetectDialog extends Dialog {
             if (isShowing()) {
                 dismiss();
             }
-        }, 1500);
+        }, 500);
         show();
     }
 
@@ -45,7 +45,7 @@ public class DetectDialog extends Dialog {
             if (isShowing()) {
                 dismiss();
             }
-        }, 1000);
+        }, 500);
     }
 
     public void notPassDetect() {

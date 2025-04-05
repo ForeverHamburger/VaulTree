@@ -1,5 +1,6 @@
 package com.xupt.vaultree.mine;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -53,12 +54,29 @@ public class MineFragment extends Fragment {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.passDetect();
-                new Handler().postDelayed(() -> {
-                    dialog.notPassDetect();
-                    new MMKVBillStorage().clearAllData();
-                }, 500);
+                showConfirmationDialog();
             }
         });
+    }
+
+
+
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("确认清除数据");
+        builder.setMessage("确定要清除所有数据吗？");
+        builder.setPositiveButton("确定", (dialogInterface, i) -> {
+            // 确认清除数据
+            dialog.passDetect();
+            new Handler().postDelayed(() -> {
+                dialog.notPassDetect();
+                new MMKVBillStorage().clearAllData();
+            }, 500);
+        });
+        builder.setNegativeButton("取消", (dialogInterface, i) -> {
+            // 用户取消操作，不进行任何处理
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
