@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".navigation.NavigationActivity">
 
     <androidx.fragment.app.FragmentContainerView
@@ -46,6 +47,7 @@
             app:itemTextColor="@color/black"
             app:itemTextAppearanceActive="@style/BnvStyle"
             app:layout_anchor="@+id/bab_navigation"
+            app:itemIconSize="24dp"
             app:menu="@menu/bottom_navigation_menu" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

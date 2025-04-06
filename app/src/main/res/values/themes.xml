@@ -3,6 +3,8 @@
     <style name="Base.Theme.VaulTree" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <item name="fontFamily">@font/content_font</item>
         <item name="android:fontFamily">@font/content_font</item>
+        <item name="android:statusBarColor">@color/orange</item>
+        <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
