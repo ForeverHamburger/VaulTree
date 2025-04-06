@@ -7,28 +7,38 @@
     android:layout_height="match_parent"
     tools:context=".splash.SplashActivity">
 
-    <ImageView
-        android:id="@+id/iv_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/pic_icon"
-        android:layout_marginBottom="150dp"
-        android:layout_marginLeft="40dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_title"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="VaulTree"
-        android:textSize="50dp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/content_font"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_icon"
-        app:layout_constraintStart_toEndOf="@+id/iv_icon"
-        app:layout_constraintTop_toTopOf="@+id/iv_icon" />
+        android:layout_marginBottom="150dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/pic_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VaulTree"
+            android:textSize="40dp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:fontFamily="@font/content_font"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_icon"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/tv_enter"

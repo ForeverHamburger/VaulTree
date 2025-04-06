@@ -3,6 +3,7 @@
     <style name="Base.Theme.VaulTree" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
     </style>
     <!--水平装饰线-->
     <style name="horizontal_decoration_style">
